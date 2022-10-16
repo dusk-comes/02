@@ -7,7 +7,7 @@ set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 
 project(Filter_IP)
 
-add_executable(ip_filter ip_filter.cpp)
+add_executable(ip_filter ip_filter.cpp functions.cpp)
 
 set_target_properties(ip_filter PROPERTIES
     CXX_STANDARD 17

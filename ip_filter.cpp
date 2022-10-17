@@ -1,10 +1,12 @@
+#include <algorithm>
+#include <functional>
 #include <iostream>
+#include <limits>
+#include <sstream>
 #include <string>
 #include <vector>
+#include <array>
 #include "functions.h"
-
-using Ip = std::vector<std::string>;
-using Pool = std::vector<Ip>;
 
 int main(int argc, char const *argv[])
 {
@@ -12,21 +14,28 @@ int main(int argc, char const *argv[])
     {
         Pool ip_pool;
 
-        for(std::string line; std::getline(std::cin, line);)
+        for(std::string value; std::getline(std::cin, value, '\t');)
         {
-            Ip ip = my_lib::split(line, '\t');
-            ip_pool.push_back(my_lib::split(ip.at(0), '.'));
+            std::istringstream is(value);
+            std::array<int, 4> ip{0, 0, 0, 0};
+            int i = 0;
+            for(std::string octet; std::getline(is, octet, '.'); ++i)
+            {
+                ip.at(i) = std::stoi(octet);
+            }
+            ip_pool.push_back(ip);
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
         }
 
-        my_lib::sort(ip_pool.begin(), ip_pool.end());
+        std::sort(ip_pool.begin(), ip_pool.end(), std::greater<std::array<int, 4>>());
 
         my_lib::print(ip_pool.cbegin(), ip_pool.cend());
 
-        my_lib::filter(ip_pool, 1);
+        my_lib::filter(ip_pool.cbegin(), ip_pool.cend(), 1);
 
-        my_lib::filter(ip_pool, 46, 70);
+        my_lib::filter(ip_pool.cbegin(), ip_pool.cend(), 46, 70);
 
-        my_lib::filter_any(ip_pool, 46);
+        my_lib::filter_any(ip_pool.cbegin(), ip_pool.cend(), 46);
 
     }
     catch(const std::exception &e)

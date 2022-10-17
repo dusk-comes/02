@@ -13,6 +13,7 @@ int main(int argc, char const *argv[])
     try
     {
         Pool ip_pool;
+        ip_pool.reserve(1000);
 
         for(std::string value; std::getline(std::cin, value, '\t');)
         {
